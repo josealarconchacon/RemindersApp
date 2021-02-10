@@ -10,6 +10,10 @@ import Foundation
 // manage the collection of reminders
 
 class ReminderService {
+    // singleton
+    // initialize ReminderService
+    static let share = ReminderService()
+    
     private var reminders = [Reminder]()
     
     // create
