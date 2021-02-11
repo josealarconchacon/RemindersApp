@@ -18,7 +18,21 @@ class ReminderService {
     
     // create
     func createReminder(reminder: Reminder) {
+        // add reminder to an array in a sorted order
+        var insertReminder: Int?
+        for (index, reminderToInsert)in reminders.enumerated() {
+            if reminderToInsert.date.timeIntervalSince1970 > reminder.date.timeIntervalSince1970 {
+                // if insertReminder date > reminder date add it else break
+                insertReminder = index
+                break
+            }
+        }
+        // if there is a reminder to insert
+        if let insertReminder = insertReminder {
+            reminders.insert(reminder, at: insertReminder)
+        } else { // // otherwise, append it
         reminders.append(reminder)
+        }
     }
     
     // update
