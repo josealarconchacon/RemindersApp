@@ -22,6 +22,16 @@ class RemindersViewController: UIViewController {
         super.viewWillAppear(animated)
         tableView.reloadData()
     }
+    
+    @IBAction func editButtonDidPressed(_ sender: UIButton) {
+        if tableView.isEditing {
+            tableView.isEditing = false
+//            sender.layer.backgroundColor = UIColor.lightGray.cgColor
+        } else {
+            tableView.isEditing = true
+            
+        }
+    }
 }
 
 extension RemindersViewController: UITableViewDataSource, UITableViewDelegate {
@@ -43,5 +53,13 @@ extension RemindersViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         ReminderService.share.toggleCompletedReminder(index: indexPath.row)
         tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        // delete cell
+        if editingStyle == .delete {
+            ReminderService.share.deleteReminder(index: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
     }
 }
