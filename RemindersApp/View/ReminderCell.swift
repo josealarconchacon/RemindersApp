@@ -15,7 +15,8 @@ class ReminderCell: UITableViewCell {
     
     func update(reminder: Reminder) {
         titleLabel.text = reminder.title
-        
+        // isCompletedView
+        completedView()
         // date
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yy hh:mma"
@@ -24,8 +25,15 @@ class ReminderCell: UITableViewCell {
         // completed view
         if reminder.isCompleted {
             isCompleted.backgroundColor = .green
+            isCompleted.layer.borderWidth = 0.0
         } else {
             isCompleted.backgroundColor = .white
+            isCompleted.layer.borderWidth = 2.0
         }
+    }
+    
+    func completedView() {
+        isCompleted.layer.cornerRadius = isCompleted.frame.size.width / 2.0
+        isCompleted.layer.borderColor = UIColor.lightGray.cgColor
     }
 }
