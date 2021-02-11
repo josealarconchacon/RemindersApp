@@ -15,6 +15,7 @@ class RemindersViewController: UIViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.tableFooterView = UIView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,5 +38,10 @@ extension RemindersViewController: UITableViewDataSource, UITableViewDelegate {
         cell.update(reminder: reminder)
         // Return cell
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        ReminderService.share.toggleCompletedReminder(index: indexPath.row)
+        tableView.reloadData()
     }
 }
