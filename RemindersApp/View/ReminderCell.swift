@@ -12,9 +12,13 @@ class ReminderCell: UITableViewCell {
     @IBOutlet weak var isCompleted: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var info: UIButton!
     
-    func update(reminder: Reminder) {
+    func update(reminder: Reminder, index: Int) {
         titleLabel.text = reminder.title
+        
+        info.tag = index
+        
         // isCompletedView
         completedView()
         // date
