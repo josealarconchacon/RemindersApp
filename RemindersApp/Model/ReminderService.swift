@@ -16,6 +16,39 @@ class ReminderService {
     
     private var reminders = [Reminder]()
     
+    
+    // Data persistence
+    private var url: URL
+    
+    private init() {
+        url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        url.appendPathComponent("reminder.json")
+        load()
+    }
+    
+    // load data
+    func load() {
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            reminders = try decoder.decode([Reminder].self, from: data)
+        } catch {
+            print("Error loading file: \(error.localizedDescription)")
+        }
+    }
+    
+    // save data
+    func save() {
+        do {
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(reminders)
+            try data.write(to: url)
+        } catch {
+            print("Error saving file: \(error.localizedDescription)")
+        }
+    }
+    
+    
     // create
     func createReminder(reminder: Reminder) {
         // add reminder to an array in a sorted order
@@ -31,8 +64,9 @@ class ReminderService {
         if let insertReminder = insertReminder {
             reminders.insert(reminder, at: insertReminder)
         } else { // // otherwise, append it
-        reminders.append(reminder)
+            reminders.append(reminder)
         }
+        save()
     }
     
     
@@ -40,6 +74,7 @@ class ReminderService {
     // update
     func updateReminder(reminder: Reminder, index: Int) {
         reminders[index] = reminder
+        save()
     }
     // get number of reminders
     func getNumberOfReminder() -> Int {
@@ -55,6 +90,7 @@ class ReminderService {
     func toggleCompletedReminder(index: Int) {
         let reminder = getReminder(index: index)
         reminder.isCompleted = !reminder.isCompleted
+        save()
     }
     
     // get the list of reminder
@@ -65,6 +101,7 @@ class ReminderService {
     // delete reminder
     func deleteReminder(index: Int) {
         reminders.remove(at: index)
+        save()
     }
     
     // get favorites reminder
