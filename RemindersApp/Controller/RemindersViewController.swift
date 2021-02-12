@@ -44,10 +44,19 @@ extension RemindersViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ReminderCell") as! ReminderCell
         // Get the reminder for the given index path
         let reminder = ReminderService.share.getReminder(index: indexPath.row)
-        // Update the cell
-        cell.update(reminder: reminder)
+        // Update cell base on the reminder object
+        cell.update(reminder: reminder, index: indexPath.row)
         // Return cell
         return cell
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "UpdateSegue",
+           let createReminderViewController = segue.destination as? CreateReminderViewController,
+           let info = sender as? UIButton {
+            // pass the index of the reminder that was selected
+            createReminderViewController.reminderIndex = info.tag
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -55,6 +64,7 @@ extension RemindersViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.reloadData()
     }
     
+    // tableView editting
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         // delete cell
         if editingStyle == .delete {
